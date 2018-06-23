@@ -39,3 +39,42 @@ Player.prototype.printCards = function(){
     
 
 }
+
+Player.prototype.claim = function(){
+    
+
+}
+
+Player.prototype.win = function(handIndex){
+    
+
+}
+
+Player.prototype.lose = function(handIndex){
+    
+
+}
+
+Player.prototype.push = function(handIndex){
+    
+
+}
+
+Player.prototype.blackjack = function(handIndex){
+    
+
+}
+
+Player.prototype.showError = function(){
+    
+
+}
+
+Player.prototype.showMessage = function(){
+    
+
+}
+
+
+
+Player.prototype.numberHands = function() { return hands.length; }

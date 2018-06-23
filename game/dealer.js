@@ -1,5 +1,5 @@
 const player = require('./player');
-const hand = require('hand');
+const hand = require('./hand');
 
 var Dealer = function(){
 
@@ -8,7 +8,7 @@ var Dealer = function(){
 
 Van.prototype = Object.create(Dealer.prototype);
 
-Van.prototype.constructor = Van;
+Van.prototype.constructor = Dealer;
 
 Dealer.prototype.deal = function(){
 
@@ -23,10 +23,14 @@ Dealer.prototype.reveal = function(){
 
 }
 
-Dealer.prototype.dealerscore = function(){
+Dealer.prototype.dealerScore = function(){
 
 }
 
-Dealer.prototype.activehand = function(){
+Dealer.prototype.activeHand = function(){
+
+}
+
+Dealer.prototype.stillHits = function (){
 
 }
