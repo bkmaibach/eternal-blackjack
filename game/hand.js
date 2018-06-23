@@ -2,7 +2,8 @@ const cards = require('cards');
 
 var Hand = function(bet, hideFirst){
     this.stack = cards.Deck();
-
+    this.bet = bet;
+    this.hideFirstCard = hideFirst;
 };
 
 Hand.prototype.cardValue = function(card){
@@ -36,7 +37,6 @@ Hand.prototype.add = function(cards){
             }
         });
     }
-    this.bust = total > 21;
     this.score = total;
 }
 
@@ -45,40 +45,40 @@ Hand.prototype.getSize = function(){
 }
 
 Hand.prototype.showCards = function(){
-
+    this.stack.map((card, i) => {
+        if( i === 0 && this.hideFirstCard === true){
+            console.log('*** FACEDOWN CARD ***');
+        } else {
+            console.log(card);
+        }
+    });
 }
 
-Hand.prototype.isbust = function(){
-
-
+Hand.prototype.isBust = function(){
+    return this.score > 21;
 }
 
 Hand.prototype.isblackjack = function(){
-
-
+    return this.score === 21;
 }
 
-Hand.prototype.isinsurable = function(){
-
-
+Hand.prototype.isInsurable = function(){
+    return this.stack.length = 2 && this.stack[1].value === 'A';
 }
 
 Hand.prototype.split = function(){
+    return this.stack.draw(1);
+}
 
+Hand.prototype.canSplit = function(){
+    return this.stack.lenngth === 2 && this.cardValue(this.stack[0]) === this.cardValue(this.stack[1]);
 
 }
 
-Hand.prototype.cansplit = function(){
-
-
+Hand.prototype.canDoubleDown = function(){
+    return this.getSize() === 2;
 }
 
-Hand.prototype.candoubledown = function(){
-
-
-}
-
-Hand.prototype.doublebet = function(){
-
-
+Hand.prototype.doubleBet = function(){
+    this.bet *= 2;
 }
