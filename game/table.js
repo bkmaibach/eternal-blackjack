@@ -6,7 +6,7 @@ const MAX_BET = 5000;
 
 var Table = function(player){
     this.shoe = new cards.BlackjackDeck();
-    //Must call void Deck::shuffleDiscard ( void ) whenever the deck is empty
+    //Must call void Deck::shuffleDiscard ( void ) whenever the deck is empty?
     this.shoe.shuffleAll();
     this.dealer = new dealer();
     this.linkedPlayer = player;
@@ -62,24 +62,19 @@ Table.prototype.playRound = function(){
         if(this.dealer.allBlackjack()){
             this.linkedPlayer.showMessage("Dealer blackjack!");
             if(this.linkedPlayer.insured){
-                //this.linkedPlayer.chips += (bet * 1.5);
                 this.linkedPlayer.claim();
             }
             this.linkedPlayer.hands.map((hand, i) => {
                 if(hand.isBlackjack()){
                     this.linkedPlayer.push(i);
-                    //this.linkedPlayer.showMessage(`Hand ${(i+1).toString()} of ${numberhands} push...`); 
                 } else {
                     this.linkedPlayer.lose(i);
-                    //this.linkedPlayer.showMessage(`Hand ${(i+1).toString()} of ${numberhands} loses!`);
                 }
             })
         } else if(dealerBust){
             this.linkedPlayer.hands.map((hand, i) => {
                 if (!hand.isBust()){
                     linkedPlayer.win(i);
-                    //this.linkedPlayer.chips += hand.bet * 2;
-                    //linkedPlayer.showMessage(`Hand ${(i + 1).toString()} of ${numberhands} wins ${hand.bet.toString()}`);
                 }
             });
         } else {

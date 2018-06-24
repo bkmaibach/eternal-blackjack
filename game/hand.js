@@ -32,7 +32,7 @@ Hand.prototype.add = function(cards){
     });
     if( total > 21 ){
         this.stack.forEach((card) => {
-            if(card.value === 'A' && total > 21){
+            if(total > 21 && card.value === 'A'){
                 total -= 10;
             }
         });
@@ -58,7 +58,7 @@ Hand.prototype.isBust = function(){
     return this.score > 21;
 }
 
-Hand.prototype.isblackjack = function(){
+Hand.prototype.isBlackjack = function(){
     return this.score === 21;
 }
 
