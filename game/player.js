@@ -1,16 +1,22 @@
 const {Hand} = require('./hand');
+const readline = require('readline');
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
 
 var Player = function(){
-    this.chips = initChips();
+    //this.chips = this.initChips();
+    this.chips = 5000;
     this.initialBet = 100;
     this.activeHandIndex = 0;
 }
 
 Player.prototype.deal = function(twoCards, initialBet){
-    this.hands = [new Hand(this.initialBet, false)];
-    this.initialBet = initialBet;
+    this.hands = [new Hand(initialBet, false)];
     this.insured = false;
-    this.activeHandIndex.add(twoCards);
+    this.activeHand().add(twoCards);
     this.printCards();
 }
 
@@ -21,7 +27,6 @@ Player.prototype.hit = function(){
         showMessage('Bust!');
         this.nextHand()
     }
-
 }
 
 Player.prototype.stay = function(){
@@ -51,9 +56,9 @@ Player.prototype.insure = function(){
 
 Player.prototype.printCards = function(){
     this.hands.map((hand, i) => {
-        showMessage(`\n Player hand ${i+1} of ${this.numberHands()}:`);
+        this.showMessage(`\n Player hand ${i+1} of ${this.numberHands()}:`);
         hand.showCards();
-        showMessage(`Hand total: ${hand.score}\n`);
+        this.showMessage(`Hand total: ${hand.score}\n`);
     });
 }
 
@@ -63,21 +68,70 @@ Player.prototype.claim = function(){
 
 Player.prototype.win = function(handIndex){
     this.chips += activeHand.bet * 2;
-    showMessage(`Hand ${(handIndex + 1).toString()} of ${numberHands()} wins ${hand.bet.toString()}`);
+    this.showMessage(`Hand ${(handIndex + 1).toString()} of ${this.numberHands()} wins ${hand.bet.toString()}`);
 
 }
 
 Player.prototype.lose = function(handIndex){
-    showMessage(`Hand ${(handIndex+1).toString()} of ${numberHands()} loses!`);
+    this.showMessage(`Hand ${(handIndex+1).toString()} of ${this.numberHands()} loses!`);
 }
 
 Player.prototype.push = function(handIndex){
-    showMessage(`Hand ${(handIndex+1).toString()} of ${numberhands()} push...`); 
+    this.showMessage(`Hand ${(handIndex+1).toString()} of ${this.numberhands()} push...`); 
 }
 
 Player.prototype.blackjack = function(handIndex){
     this.chips += activeHand.bet;
-    showMessage(`Hand ${(handIndex+1).toString()} of ${numberhands()} push...`); 
+    this.showMessage(`Hand ${(handIndex+1).toString()} of ${this.numberhands()} push...`); 
+}
+
+Player.prototype.allBust = function(){
+    this.hands.forEach((hand) => {
+        if(!hand.isBust()){
+            return false;
+        }
+    });
+    return true;
+}
+
+Player.prototype.allBlackjack = function(){
+    this.hands.forEach((hand) => {
+        if(!hand.isBlackjack()){
+            return false;
+        }
+    });
+    return true;
+}
+
+
+// Player.prototype.initChips = function(){
+//     this.chips = 5000;
+// }
+
+Player.prototype.numberHands = function() {
+    return this.hands.length;
+}
+
+Player.prototype.getBet = function(min, max){
+    rl.question('Place your bet:', (answer) => {
+        rl.close();
+        return answer;
+      });
+}
+
+Player.prototype.getAction = function(min, max){
+    rl.question('hit(h)/stay(s)/split(p)/doubledown(d)/insure(i)?:', (answer) => {
+        rl.close();
+        return answer;
+      });
+}
+
+Player.prototype.activeHand = function(){
+    return this.hands[this.activeHandIndex];
+}
+
+Player.prototype.doneTurn = function(){
+    return this.activeHandIndex >= this.hands.length;
 }
 
 Player.prototype.showError = function(error){
@@ -88,8 +142,6 @@ Player.prototype.showMessage = function(message){
     console.log(message);
 }
 
-Player.prototype.initChips = function(){
-    this.chips = 5000;
+module.exports = {
+    Player
 }
-
-Player.prototype.numberHands = function() { return hands.length; }

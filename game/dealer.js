@@ -1,33 +1,33 @@
-const player = require('./player');
+const {Player} = require('./player');
 const {Hand} = require('./hand');
 
 var Dealer = function(){
 
-    player.call(this)
+    Player.call(this)
 }
 
-Dealer.prototype = Object.create(Dealer.prototype);
+Dealer.prototype = Object.create(Player.prototype);
 
 Dealer.prototype.constructor = Dealer;
 
 Dealer.prototype.deal = function(twoCards){
     this.hands = [new Hand(null, true)];
     this.activeHandIndex = 0;
-    this.activeHand.add(twoCards);
+    this.activeHand().add(twoCards);
     this.printCards();
 }
 
 
 Dealer.prototype.printCards = function(){
-    showMessage('\nDealer hand:');
-    this.activeHand.showCards();
-    if (!this.activeHand.hideFirstCard){
-        showMessage(`Dealer total: ${dealerScore()}\n`)
+    this.showMessage('\nDealer hand:');
+    this.activeHand().showCards();
+    if (!this.activeHand().hideFirstCard){
+        this.showMessage(`Dealer total: ${this.dealerScore()}\n`)
     }
 }
 
 Dealer.prototype.reveal = function(){
-    this.activeHnad.hideFirstCard = false;
+    this.activeHand().hideFirstCard = false;
     this.printCards();
 }
 
@@ -41,4 +41,8 @@ Dealer.prototype.activeHand = function(){
 
 Dealer.prototype.stillHits = function (){
     return this.dealerScore < 17;
+}
+
+module.exports = {
+    Dealer
 }

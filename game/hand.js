@@ -1,12 +1,12 @@
 const cards = require('cards');
 
 var Hand = function(bet, hideFirst){
-    this.stack = cards.Deck();
+    this.stack = new cards.Deck();
     this.bet = bet;
     this.hideFirstCard = hideFirst;
 };
 
-Hand.prototype.cardValue = function(card){
+cardValue = function(card){
     return {
         '2': 2,
         '3': 3,
@@ -25,13 +25,13 @@ Hand.prototype.cardValue = function(card){
 }
 
 Hand.prototype.add = function(cards){
-    this.stack.push(cards);
+    this.stack.add(cards);
     var total = 0;
-    this.stack.forEach((card) => {
+    this.stack.cards.forEach((card) => {
         total += cardValue(card);
     });
     if( total > 21 ){
-        this.stack.forEach((card) => {
+        this.stack.cards.forEach((card) => {
             if(total > 21 && card.value === 'A'){
                 total -= 10;
             }
@@ -45,7 +45,7 @@ Hand.prototype.getSize = function(){
 }
 
 Hand.prototype.showCards = function(){
-    this.stack.map((card, i) => {
+    this.stack.cards.map((card, i) => {
         if( i === 0 && this.hideFirstCard === true){
             console.log('*** FACEDOWN CARD ***');
         } else {
@@ -81,4 +81,8 @@ Hand.prototype.canDoubleDown = function(){
 
 Hand.prototype.doubleBet = function(){
     this.bet *= 2;
+}
+
+module.exports = {
+    Hand
 }

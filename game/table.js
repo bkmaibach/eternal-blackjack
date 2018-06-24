@@ -5,19 +5,20 @@ const MIN_BET = 10;
 const MAX_BET = 5000;
 
 var Table = function(player){
-    this.shoe = new cards.BlackjackDeck();
+    //this.shoe = new cards.BlackjackDeck();
+    this.shoe = new cards.PokerDeck();
     //Must call void Deck::shuffleDiscard ( void ) whenever the deck is empty?
     this.shoe.shuffleAll();
-    this.dealer = new dealer();
+    this.dealer = new Dealer();
     this.linkedPlayer = player;
 }
 
 Table.prototype.playRound = function(){
-    var baseBet = this.player.getBet(MIN_BET, MAX_BET);
+    var baseBet = this.linkedPlayer.getBet(MIN_BET, MAX_BET);
     this.dealer.deal(this.shoe.draw(2));
-    this.linkedPlayer.deal(this.shoe.deal(2));
+    this.linkedPlayer.deal(this.shoe.draw(2));
     while (!this.linkedPlayer.doneTurn()){
-        switch(player.getAction()){
+        switch(this.linkedPlayer.getAction()){
             case 'h':
                 this.linkedPlayer.hit(this.shoe.draw(1));
                 break;
@@ -91,5 +92,7 @@ Table.prototype.playRound = function(){
             })
         }
     }
-
+}
+module.exports = {
+    Table
 }
