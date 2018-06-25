@@ -12,8 +12,7 @@ Dealer.prototype.constructor = Dealer;
 
 Dealer.prototype.deal = function(twoCards){
     this.hands = [new Hand(null, true)];
-    this.activeHandIndex = 0;
-    this.activeHand().add(twoCards);
+    this.hands[0].add(twoCards);
     this.printCards();
 }
 
@@ -40,7 +39,11 @@ Dealer.prototype.activeHand = function(){
 }
 
 Dealer.prototype.stillHits = function (){
-    return this.dealerScore < 17;
+    return this.dealerScore() < 17;
+}
+
+Dealer.prototype.isInsurable = function(){
+    return this.hands[0].cards.length === 2 && this.hands[0].cards[1].value === 'A';
 }
 
 module.exports = {
