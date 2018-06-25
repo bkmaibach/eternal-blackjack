@@ -1,5 +1,6 @@
 const {Hand} = require('./hand');
 const readline = require('readline');
+const rls = require('readline-sync');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -20,8 +21,8 @@ Player.prototype.deal = function(twoCards, initialBet){
     this.printCards();
 }
 
-Player.prototype.hit = function(){
-    this.activeHand.add(card);
+Player.prototype.hit = function(card){
+    this.activeHand()().add(card);
     this.printCards();
     if(this.activeHand.isBust()){
         showMessage('Bust!');
@@ -35,8 +36,8 @@ Player.prototype.stay = function(){
 
 Player.prototype.doubleDown = function(card){
     this.chips -= this.initialBet;
-    this.activeHand.doubleBet();
-    this.activeHand.add(card);
+    this.activeHand().doubleBet();
+    this.activeHand().add(card);
     this.printCards();
     if(this.activeHand.isBust()){
         showMessage('Bust!');
@@ -46,7 +47,7 @@ Player.prototype.doubleDown = function(card){
 
 Player.prototype.split = function(){
     this.chips -= this.initialBet;
-    this.hands.splice((this.activeHandIndex + 1), 0, new Hand(this.activeHand.bet, false));
+    this.hands.splice((this.activeHandIndex + 1), 0, new Hand(this.activeHand().bet, false));
 }
 
 Player.prototype.insure = function(){
@@ -69,7 +70,6 @@ Player.prototype.claim = function(){
 Player.prototype.win = function(handIndex){
     this.chips += activeHand.bet * 2;
     this.showMessage(`Hand ${(handIndex + 1).toString()} of ${this.numberHands()} wins ${hand.bet.toString()}`);
-
 }
 
 Player.prototype.lose = function(handIndex){
@@ -82,24 +82,24 @@ Player.prototype.push = function(handIndex){
 
 Player.prototype.blackjack = function(handIndex){
     this.chips += activeHand.bet;
-    this.showMessage(`Hand ${(handIndex+1).toString()} of ${this.numberhands()} push...`); 
+    this.showMessage(`Hand ${(handIndex+1).toString()} of ${this.numberhands()} blackjack!`); 
 }
 
 Player.prototype.allBust = function(){
-    this.hands.forEach((hand) => {
-        if(!hand.isBust()){
+    for(i = 0; i< this.hands.length; i++){
+        if(!hand[i].isBust()){
             return false;
         }
-    });
+    }
     return true;
 }
 
 Player.prototype.allBlackjack = function(){
-    this.hands.forEach((hand) => {
-        if(!hand.isBlackjack()){
+    for(i = 0; i< this.hands.length; i++){
+        if(!hand[i].isBlackjack()){
             return false;
         }
-    });
+    }
     return true;
 }
 
@@ -113,17 +113,19 @@ Player.prototype.numberHands = function() {
 }
 
 Player.prototype.getBet = function(min, max){
-    rl.question('Place your bet:', (answer) => {
-        rl.close();
-        return answer;
-      });
+    // rl.question('Place your bet:', (answer) => {
+    //     rl.close();
+    //     return answer;
+    //   });
+    return rls.question('Place your bet: ');
 }
 
 Player.prototype.getAction = function(min, max){
-    rl.question('hit(h)/stay(s)/split(p)/doubledown(d)/insure(i)?:', (answer) => {
-        rl.close();
-        return answer;
-      });
+    // rl.question('hit(h)/stay(s)/split(p)/doubledown(d)/insure(i)?:', (answer) => {
+    //     rl.close();
+    //     return answer;
+    //   });
+    return rls.question('hit(h)/stay(s)/split(p)/doubledown(d)/insure(i)?:');
 }
 
 Player.prototype.activeHand = function(){

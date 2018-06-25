@@ -1,7 +1,7 @@
 const cards = require('cards');
 
 var Hand = function(bet, hideFirst){
-    this.stack = new cards.Deck();
+    this.pile = new cards.Pile();
     this.bet = bet;
     this.hideFirstCard = hideFirst;
 };
@@ -25,33 +25,36 @@ cardValue = function(card){
 }
 
 Hand.prototype.add = function(cards){
-    this.stack.add(cards);
+    this.pile.concat(cards)
+    //this.pile.add(cards);
     var total = 0;
-    this.stack.cards.forEach((card) => {
-        total += cardValue(card);
-    });
+    for( i = 0; i < this.pile.length; i++){
+        total += cardValue(this.pile[i]);
+    }
     if( total > 21 ){
-        this.stack.cards.forEach((card) => {
-            if(total > 21 && card.value === 'A'){
+        for( i = 0; i < this.pile.length; i++){
+            if(total > 21 && this.pile[i].value === 'A'){
                 total -= 10;
             }
-        });
+        }
     }
     this.score = total;
 }
 
 Hand.prototype.getSize = function(){
-    return this.stack.length;
+    return this.pile.length;
 }
 
 Hand.prototype.showCards = function(){
-    this.stack.cards.map((card, i) => {
+    this.pile.map((card, i) => {
+        console.log(`card ${i}:`)
         if( i === 0 && this.hideFirstCard === true){
             console.log('*** FACEDOWN CARD ***');
         } else {
             console.log(card);
         }
     });
+
 }
 
 Hand.prototype.isBust = function(){
@@ -63,15 +66,15 @@ Hand.prototype.isBlackjack = function(){
 }
 
 Hand.prototype.isInsurable = function(){
-    return this.stack.length = 2 && this.stack[1].value === 'A';
+    return this.pile.length = 2 && this.pile[1].value === 'A';
 }
 
 Hand.prototype.split = function(){
-    return this.stack.draw(1);
+    return this.pile.draw(1);
 }
 
 Hand.prototype.canSplit = function(){
-    return this.stack.lenngth === 2 && this.cardValue(this.stack[0]) === this.cardValue(this.stack[1]);
+    return this.pile.lenngth === 2 && this.cardValue(this.pile[0]) === this.cardValue(this.pile[1]);
 
 }
 
